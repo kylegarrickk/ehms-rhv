@@ -6,6 +6,9 @@
 
     <title>EHMS-RHV | Emergency Healthcare</title>
 
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+
     <style>
         * {
             box-sizing: border-box;
@@ -75,6 +78,43 @@
         .number {
             font-size: 30px;
             font-weight: bold;
+        }
+
+        /* Map Section */
+        .map-panel {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .map-panel h2 {
+            margin-bottom: 8px;
+            font-size: 20px;
+        }
+
+        .map-panel p {
+            color: #6b7280;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        #map {
+            height: 400px;
+            width: 100%;
+            border-radius: 8px;
+        }
+
+        /* Route Information */
+        #route-info {
+            margin-top: 15px;
+            padding: 12px 15px;
+            background: #f4f6f8;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 1.7;
         }
 
         .main-section {
@@ -190,6 +230,24 @@
 
         </div>
 
+        <!-- Village & Healthcare Centre Map -->
+        <div class="map-panel">
+
+            <h2>Village & Healthcare Centre Map</h2>
+
+            <p>
+                Map view for village locations, healthcare centres and emergency routes.
+            </p>
+
+            <div id="map"></div>
+
+            <!-- Route Information -->
+            <div id="route-info">
+                Calculating emergency route...
+            </div>
+
+        </div>
+
         <div class="main-section">
 
             <div class="panel">
@@ -247,6 +305,107 @@
         </div>
 
     </div>
+
+    <!-- Leaflet JavaScript -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Map Initialization -->
+    <script>
+
+        // Create map centered around Dehradun
+        const map = L.map('map').setView([30.3165, 78.0322], 10);
+
+        // OpenStreetMap map tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Healthcare Centre
+        const healthcareCentre = L.marker([30.3165, 78.0322]).addTo(map);
+
+        healthcareCentre.bindPopup(
+            "<b>Healthcare Centre</b><br>Dehradun"
+        );
+
+        // Demo Village
+        const village = L.marker([30.3800, 78.1000]).addTo(map);
+
+        village.bindPopup(
+            "<b>Village: Bhairavgaon</b><br>Emergency Location"
+        );
+
+
+        // ----------------------------------------------------
+        // OSRM ROAD ROUTING
+        // ----------------------------------------------------
+
+        // Village coordinates
+        const villageLat = 30.3800;
+        const villageLng = 78.1000;
+
+        // Healthcare Centre coordinates
+        const centreLat = 30.3165;
+        const centreLng = 78.0322;
+
+        // Request route from OSRM
+        const osrmURL =
+            `https://router.project-osrm.org/route/v1/driving/` +
+            `${villageLng},${villageLat};${centreLng},${centreLat}` +
+            `?overview=full&geometries=geojson`;
+
+        fetch(osrmURL)
+            .then(response => response.json())
+            .then(data => {
+
+                if (data.code === "Ok") {
+
+                    const route = data.routes[0];
+
+                    // Route information
+                    const distanceKm = (route.distance / 1000).toFixed(2);
+                    const durationMinutes = (route.duration / 60).toFixed(1);
+
+                    // Draw the actual road route
+                    const routeLayer = L.geoJSON(route.geometry)
+                        .bindPopup(
+                            `<b>Emergency Route</b><br>` +
+                            `Village → Healthcare Centre<br>` +
+                            `Distance: ${distanceKm} km<br>` +
+                            `Estimated Time: ${durationMinutes} minutes`
+                        )
+                        .addTo(map);
+
+                    // Display route information below the map
+                    document.getElementById("route-info").innerHTML =
+                        `<b>Emergency Route:</b> Bhairavgaon → Dehradun Healthcare Centre<br>` +
+                        `<b>Distance:</b> ${distanceKm} km &nbsp; | &nbsp; ` +
+                        `<b>Estimated Travel Time:</b> ${durationMinutes} minutes`;
+
+                    console.log("Route calculated successfully.");
+                    console.log("Distance:", distanceKm, "km");
+                    console.log("Duration:", durationMinutes, "minutes");
+
+                } else {
+
+                    document.getElementById("route-info").innerHTML =
+                        "Unable to calculate emergency route.";
+
+                    console.log("No route found.");
+
+                }
+
+            })
+            .catch(error => {
+
+                document.getElementById("route-info").innerHTML =
+                    "Routing service unavailable.";
+
+                console.log("Routing error:", error);
+
+            });
+
+    </script>
 
 </body>
 </html>
