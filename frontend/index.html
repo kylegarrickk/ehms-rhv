@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -81,6 +83,7 @@
         }
 
         /* Map Section */
+
         .map-panel {
             background: white;
             padding: 25px;
@@ -107,6 +110,7 @@
         }
 
         /* Route Information */
+
         #route-info {
             margin-top: 15px;
             padding: 12px 15px;
@@ -165,8 +169,77 @@
             font-weight: bold;
         }
 
+        /* Forms */
+
+        .form-section {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .form-description {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 5px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #12355b;
+        }
+
+        .form-button {
+            margin-top: 18px;
+            padding: 13px 20px;
+            border: none;
+            border-radius: 6px;
+            background: #12355b;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+        }
+
+        .form-button:hover {
+            background: #0d2947;
+        }
+
         .button {
-            margin-top: 20px;
+            margin-top: 8px;
             padding: 13px 20px;
             border: none;
             border-radius: 6px;
@@ -174,13 +247,30 @@
             color: white;
             font-size: 15px;
             cursor: pointer;
+            width: 100%;
         }
 
         .button:hover {
             background: #b91c1c;
         }
 
+        #patient-message,
+        #form-message {
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .success-message {
+            color: #15803d;
+        }
+
+        .error-message {
+            color: #dc2626;
+        }
+
         @media (max-width: 900px) {
+
             .cards {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -188,52 +278,246 @@
             .main-section {
                 grid-template-columns: 1fr;
             }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
         }
+
     </style>
+
 </head>
+
 
 <body>
 
     <header>
+
         <h1>Emergency Healthcare Management System</h1>
-        <p>EHMS-RHV • Remote Hilly Villages • LifeLink</p>
+
+        <p>
+            EHMS-RHV • Remote Hilly Villages • LifeLink
+        </p>
+
     </header>
+
 
     <div class="container">
 
         <div class="title">
-            <h2>Emergency Coordination Dashboard</h2>
-            <p>Monitor emergencies, healthcare resources and network status.</p>
+
+            <h2>
+                Emergency Coordination Dashboard
+            </h2>
+
+            <p>
+                Monitor emergencies, healthcare resources and network status.
+            </p>
+
         </div>
+
+
+        <!-- Dashboard Cards -->
 
         <div class="cards">
 
             <div class="card">
-                <h3>Active Emergencies</h3>
-                <div class="number">03</div>
+
+                <h3>
+                    Active Emergencies
+                </h3>
+
+                <div class="number">
+
+                    <span id="active-emergencies">
+                        0
+                    </span>
+
+                </div>
+
             </div>
 
-            <div class="card">
-                <h3>Available Ambulances</h3>
-                <div class="number">02</div>
-            </div>
 
             <div class="card">
-                <h3>Available Beds</h3>
-                <div class="number">08</div>
+
+                <h3>
+                    Available Ambulances
+                </h3>
+
+                <div class="number">
+                    02
+                </div>
+
             </div>
 
+
             <div class="card">
-                <h3>Available Doctors</h3>
-                <div class="number">04</div>
+
+                <h3>
+                    Available Beds
+                </h3>
+
+                <div class="number">
+                    08
+                </div>
+
+            </div>
+
+
+            <div class="card">
+
+                <h3>
+                    Available Doctors
+                </h3>
+
+                <div class="number">
+                    04
+                </div>
+
             </div>
 
         </div>
 
+
+        <!-- Patient Registration -->
+
+        <div class="form-section">
+
+            <h2>
+                Patient Registration
+            </h2>
+
+            <p class="form-description">
+                Register a patient before reporting an emergency.
+            </p>
+
+
+            <form id="patient-form">
+
+                <div class="form-grid">
+
+
+                    <div class="form-group">
+
+                        <label for="patient-name">
+                            Patient Name
+                        </label>
+
+                        <input
+                            type="text"
+                            id="patient-name"
+                            placeholder="Enter patient name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="patient-age">
+                            Age
+                        </label>
+
+                        <input
+                            type="number"
+                            id="patient-age"
+                            placeholder="Enter age"
+                            min="0"
+                            max="120"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="patient-gender">
+                            Gender
+                        </label>
+
+                        <select id="patient-gender" required>
+
+                            <option value="">
+                                Select gender
+                            </option>
+
+                            <option value="Male">
+                                Male
+                            </option>
+
+                            <option value="Female">
+                                Female
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="patient-phone">
+                            Phone
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="patient-phone"
+                            placeholder="Enter phone number"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="patient-village">
+                            Village
+                        </label>
+
+                        <input
+                            type="text"
+                            id="patient-village"
+                            placeholder="Enter village"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="form-button"
+                >
+                    Register Patient
+                </button>
+
+
+                <div id="patient-message"></div>
+
+            </form>
+
+        </div>
+
+
         <!-- Village & Healthcare Centre Map -->
+
         <div class="map-panel">
 
-            <h2>Village & Healthcare Centre Map</h2>
+            <h2>
+                Village & Healthcare Centre Map
+            </h2>
 
             <p>
                 Map view for village locations, healthcare centres and emergency routes.
@@ -241,63 +525,212 @@
 
             <div id="map"></div>
 
+
             <!-- Route Information -->
+
             <div id="route-info">
                 Calculating emergency route...
             </div>
 
         </div>
 
+
+        <!-- Main Section -->
+
         <div class="main-section">
 
+
+            <!-- Emergency Queue -->
+
             <div class="panel">
-                <h2>Emergency Queue</h2>
 
-                <div class="emergency">
-                    <strong>Emergency #E001 — Critical</strong>
-                    Village: Bhairavgaon
-                    <br>
-                    Status: Waiting for ambulance
+                <h2>
+                    Emergency Queue
+                </h2>
+
+
+                <div id="emergency-list">
+
+                    Loading emergencies...
+
                 </div>
 
-                <div class="emergency">
-                    <strong>Emergency #E002 — High</strong>
-                    Village: Devgarh
-                    <br>
-                    Status: Ambulance assigned
+
+                <!-- Emergency Reporting Form -->
+
+                <div class="emergency-form">
+
+                    <h3>
+                        Report New Emergency
+                    </h3>
+
+
+                    <form id="emergency-form">
+
+
+                        <div class="form-group">
+
+                            <label for="patient-id">
+                                Patient ID
+                            </label>
+
+                            <input
+                                type="number"
+                                id="patient-id"
+                                placeholder="Enter patient ID"
+                                min="1"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="emergency-type">
+                                Emergency Type
+                            </label>
+
+                            <select id="emergency-type" required>
+
+                                <option value="">
+                                    Select emergency type
+                                </option>
+
+                                <option value="Accident">
+                                    Accident
+                                </option>
+
+                                <option value="Medical">
+                                    Medical
+                                </option>
+
+                                <option value="Injury">
+                                    Injury
+                                </option>
+
+                                <option value="Trauma">
+                                    Trauma
+                                </option>
+
+                                <option value="Other">
+                                    Other
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group">
+
+                            <label for="priority">
+                                Priority
+                            </label>
+
+                            <select id="priority" required>
+
+                                <option value="">
+                                    Select priority
+                                </option>
+
+                                <option value="1">
+                                    Critical
+                                </option>
+
+                                <option value="2">
+                                    High
+                                </option>
+
+                                <option value="3">
+                                    Medium
+                                </option>
+
+                                <option value="4">
+                                    Low
+                                </option>
+
+                            </select>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="button"
+                        >
+                            Report Emergency
+                        </button>
+
+
+                        <div id="form-message"></div>
+
+
+                    </form>
+
                 </div>
 
-                <div class="emergency">
-                    <strong>Emergency #E003 — Medium</strong>
-                    Village: Rampur
-                    <br>
-                    Status: Hospital matching
-                </div>
-
-                <button class="button">Report Emergency</button>
             </div>
 
+
+            <!-- System Status -->
+
             <div class="panel">
-                <h2>System Status</h2>
+
+                <h2>
+                    System Status
+                </h2>
+
 
                 <div class="status">
-                    <span>Network</span>
-                    <span class="online">ONLINE</span>
+
+                    <span>
+                        Network
+                    </span>
+
+                    <span class="online">
+                        ONLINE
+                    </span>
+
                 </div>
 
-                <div class="status">
-                    <span>Database</span>
-                    <span class="online">CONNECTED</span>
-                </div>
 
                 <div class="status">
-                    <span>Emergency Queue</span>
-                    <span class="online">ACTIVE</span>
+
+                    <span>
+                        Database
+                    </span>
+
+                    <span class="online">
+                        CONNECTED
+                    </span>
+
                 </div>
 
+
                 <div class="status">
-                    <span>Synchronization</span>
-                    <span class="online">READY</span>
+
+                    <span>
+                        Emergency Queue
+                    </span>
+
+                    <span class="online">
+                        ACTIVE
+                    </span>
+
+                </div>
+
+
+                <div class="status">
+
+                    <span>
+                        Synchronization
+                    </span>
+
+                    <span class="online">
+                        READY
+                    </span>
+
                 </div>
 
             </div>
@@ -306,30 +739,491 @@
 
     </div>
 
+
     <!-- Leaflet JavaScript -->
+
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
-    <!-- Map Initialization -->
+
+    <!-- Patient + Emergency API -->
+
     <script>
 
+
+        // --------------------------------------------
+        // PATIENT REGISTRATION
+        // --------------------------------------------
+
+        document.getElementById(
+            "patient-form"
+        ).addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const name =
+                    document.getElementById(
+                        "patient-name"
+                    ).value;
+
+
+                const age =
+                    document.getElementById(
+                        "patient-age"
+                    ).value;
+
+
+                const gender =
+                    document.getElementById(
+                        "patient-gender"
+                    ).value;
+
+
+                const phone =
+                    document.getElementById(
+                        "patient-phone"
+                    ).value;
+
+
+                const village =
+                    document.getElementById(
+                        "patient-village"
+                    ).value;
+
+
+                const message =
+                    document.getElementById(
+                        "patient-message"
+                    );
+
+
+                message.textContent =
+                    "Registering patient...";
+
+                message.className = "";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/patients",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+
+                                    name: name,
+
+                                    age: Number(age),
+
+                                    gender: gender,
+
+                                    phone: phone,
+
+                                    village: village
+
+                                })
+
+                            }
+                        );
+
+
+                    const result =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            result.error ||
+                            "Failed to register patient"
+                        );
+
+                    }
+
+
+                    message.textContent =
+                        `Patient registered successfully. Patient ID: ${result.patient_id}`;
+
+                    message.className =
+                        "success-message";
+
+
+                    // Clear form
+
+                    document.getElementById(
+                        "patient-form"
+                    ).reset();
+
+
+                    // Automatically put new Patient ID
+                    // into Emergency form
+
+                    document.getElementById(
+                        "patient-id"
+                    ).value =
+                        result.patient_id;
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Patient registration failed:",
+                        error
+                    );
+
+
+                    message.textContent =
+                        error.message;
+
+                    message.className =
+                        "error-message";
+
+                }
+
+            }
+        );
+
+
+
+        // --------------------------------------------
+        // LOAD EMERGENCIES
+        // --------------------------------------------
+
+        async function loadEmergencies() {
+
+            try {
+
+                const response =
+                    await fetch(
+                        "/api/emergencies"
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "Failed to fetch emergency data"
+                    );
+
+                }
+
+
+                const emergencies =
+                    await response.json();
+
+
+                // Update active emergency count
+
+                const activeEmergencies =
+                    emergencies.filter(
+                        emergency =>
+                            emergency.status !== "Completed"
+                    );
+
+
+                document.getElementById(
+                    "active-emergencies"
+                ).textContent =
+                    activeEmergencies.length;
+
+
+                // Emergency queue container
+
+                const emergencyList =
+                    document.getElementById(
+                        "emergency-list"
+                    );
+
+
+                emergencyList.innerHTML = "";
+
+
+                // If there are no emergencies
+
+                if (emergencies.length === 0) {
+
+                    emergencyList.innerHTML =
+                        "<p>No emergencies currently registered.</p>";
+
+                    return;
+
+                }
+
+
+                // Priority labels
+
+                const priorityLabels = {
+
+                    1: "Critical",
+                    2: "High",
+                    3: "Medium",
+                    4: "Low"
+
+                };
+
+
+                // Create emergency cards
+
+                emergencies.forEach(
+                    emergency => {
+
+                        const emergencyCard =
+                            document.createElement(
+                                "div"
+                            );
+
+
+                        emergencyCard.className =
+                            "emergency";
+
+
+                        const priority =
+                            priorityLabels[
+                                emergency.priority
+                            ] ||
+                            emergency.priority;
+
+
+                        // Display patient name and village
+                        // returned by Flask API
+
+                        emergencyCard.innerHTML =
+
+                            `<strong>
+                                Emergency #${emergency.emergency_id}
+                                — ${priority}
+                            </strong>` +
+
+                            `Patient: ${emergency.patient_name}<br>` +
+
+                            `Village: ${emergency.village}<br>` +
+
+                            `Type: ${emergency.emergency_type}<br>` +
+
+                            `Status: ${emergency.status}`;
+
+
+                        emergencyList.appendChild(
+                            emergencyCard
+                        );
+
+                    }
+                );
+
+
+            } catch (error) {
+
+                console.error(
+                    "Failed to load emergencies:",
+                    error
+                );
+
+
+                document.getElementById(
+                    "emergency-list"
+                ).innerHTML =
+                    "<p>Unable to load emergency data.</p>";
+
+            }
+
+        }
+
+
+
+        // --------------------------------------------
+        // REPORT NEW EMERGENCY
+        // --------------------------------------------
+
+        document.getElementById(
+            "emergency-form"
+        ).addEventListener(
+            "submit",
+            async function(event) {
+
+                event.preventDefault();
+
+
+                const patientId =
+                    document.getElementById(
+                        "patient-id"
+                    ).value;
+
+
+                const emergencyType =
+                    document.getElementById(
+                        "emergency-type"
+                    ).value;
+
+
+                const priority =
+                    document.getElementById(
+                        "priority"
+                    ).value;
+
+
+                const message =
+                    document.getElementById(
+                        "form-message"
+                    );
+
+
+                message.textContent =
+                    "Submitting emergency...";
+
+                message.className = "";
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            "/api/emergencies",
+                            {
+
+                                method: "POST",
+
+                                headers: {
+                                    "Content-Type":
+                                        "application/json"
+                                },
+
+                                body: JSON.stringify({
+
+                                    patient_id:
+                                        Number(patientId),
+
+                                    priority:
+                                        Number(priority),
+
+                                    emergency_type:
+                                        emergencyType
+
+                                })
+
+                            }
+                        );
+
+
+                    const result =
+                        await response.json();
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            result.error ||
+                            "Failed to create emergency"
+                        );
+
+                    }
+
+
+                    message.textContent =
+                        `Emergency #${result.emergency_id} created successfully.`;
+
+                    message.className =
+                        "success-message";
+
+
+                    // Clear emergency form
+
+                    document.getElementById(
+                        "emergency-form"
+                    ).reset();
+
+
+                    // Reload emergency queue
+
+                    await loadEmergencies();
+
+
+                } catch (error) {
+
+                    console.error(
+                        "Emergency creation failed:",
+                        error
+                    );
+
+
+                    message.textContent =
+                        error.message;
+
+                    message.className =
+                        "error-message";
+
+                }
+
+            }
+        );
+
+
+        // Load emergency data when page opens
+
+        loadEmergencies();
+
+
+    </script>
+
+
+    <!-- Map Initialization -->
+
+    <script>
+
+
         // Create map centered around Dehradun
-        const map = L.map('map').setView([30.3165, 78.0322], 10);
+
+        const map =
+            L.map('map').setView(
+                [30.3165, 78.0322],
+                10
+            );
+
 
         // OpenStreetMap map tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; OpenStreetMap contributors'
-        }).addTo(map);
+
+        L.tileLayer(
+            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            {
+
+                maxZoom: 19,
+
+                attribution:
+                    '&copy; OpenStreetMap contributors'
+
+            }
+        ).addTo(map);
+
 
         // Healthcare Centre
-        const healthcareCentre = L.marker([30.3165, 78.0322]).addTo(map);
+
+        const healthcareCentre =
+            L.marker(
+                [30.3165, 78.0322]
+            ).addTo(map);
+
 
         healthcareCentre.bindPopup(
             "<b>Healthcare Centre</b><br>Dehradun"
         );
 
+
         // Demo Village
-        const village = L.marker([30.3800, 78.1000]).addTo(map);
+
+        const village =
+            L.marker(
+                [30.3800, 78.1000]
+            ).addTo(map);
+
 
         village.bindPopup(
             "<b>Village: Bhairavgaon</b><br>Emergency Location"
@@ -341,71 +1235,149 @@
         // ----------------------------------------------------
 
         // Village coordinates
-        const villageLat = 30.3800;
-        const villageLng = 78.1000;
+
+        const villageLat =
+            30.3800;
+
+        const villageLng =
+            78.1000;
+
 
         // Healthcare Centre coordinates
-        const centreLat = 30.3165;
-        const centreLng = 78.0322;
+
+        const centreLat =
+            30.3165;
+
+        const centreLng =
+            78.0322;
+
 
         // Request route from OSRM
+
         const osrmURL =
             `https://router.project-osrm.org/route/v1/driving/` +
             `${villageLng},${villageLat};${centreLng},${centreLat}` +
             `?overview=full&geometries=geojson`;
 
+
         fetch(osrmURL)
-            .then(response => response.json())
-            .then(data => {
 
-                if (data.code === "Ok") {
+            .then(
+                response =>
+                    response.json()
+            )
 
-                    const route = data.routes[0];
+            .then(
+                data => {
 
-                    // Route information
-                    const distanceKm = (route.distance / 1000).toFixed(2);
-                    const durationMinutes = (route.duration / 60).toFixed(1);
+                    if (data.code === "Ok") {
 
-                    // Draw the actual road route
-                    const routeLayer = L.geoJSON(route.geometry)
+                        const route =
+                            data.routes[0];
+
+
+                        // Route information
+
+                        const distanceKm =
+                            (
+                                route.distance / 1000
+                            ).toFixed(2);
+
+
+                        const durationMinutes =
+                            (
+                                route.duration / 60
+                            ).toFixed(1);
+
+
+                        // Draw the actual road route
+
+                        L.geoJSON(
+                            route.geometry
+                        )
                         .bindPopup(
+
                             `<b>Emergency Route</b><br>` +
                             `Village → Healthcare Centre<br>` +
                             `Distance: ${distanceKm} km<br>` +
                             `Estimated Time: ${durationMinutes} minutes`
+
                         )
                         .addTo(map);
 
-                    // Display route information below the map
-                    document.getElementById("route-info").innerHTML =
-                        `<b>Emergency Route:</b> Bhairavgaon → Dehradun Healthcare Centre<br>` +
-                        `<b>Distance:</b> ${distanceKm} km &nbsp; | &nbsp; ` +
-                        `<b>Estimated Travel Time:</b> ${durationMinutes} minutes`;
 
-                    console.log("Route calculated successfully.");
-                    console.log("Distance:", distanceKm, "km");
-                    console.log("Duration:", durationMinutes, "minutes");
+                        // Display route information below map
 
-                } else {
+                        document.getElementById(
+                            "route-info"
+                        ).innerHTML =
 
-                    document.getElementById("route-info").innerHTML =
-                        "Unable to calculate emergency route.";
+                            `<b>Emergency Route:</b> ` +
+                            `Bhairavgaon → Dehradun Healthcare Centre<br>` +
 
-                    console.log("No route found.");
+                            `<b>Distance:</b> ${distanceKm} km &nbsp; | &nbsp; ` +
+
+                            `<b>Estimated Travel Time:</b> ` +
+                            `${durationMinutes} minutes`;
+
+
+                        console.log(
+                            "Route calculated successfully."
+                        );
+
+
+                        console.log(
+                            "Distance:",
+                            distanceKm,
+                            "km"
+                        );
+
+
+                        console.log(
+                            "Duration:",
+                            durationMinutes,
+                            "minutes"
+                        );
+
+
+                    } else {
+
+                        document.getElementById(
+                            "route-info"
+                        ).innerHTML =
+                            "Unable to calculate emergency route.";
+
+
+                        console.log(
+                            "No route found."
+                        );
+
+                    }
 
                 }
+            )
 
-            })
-            .catch(error => {
+            .catch(
+                error => {
 
-                document.getElementById("route-info").innerHTML =
-                    "Routing service unavailable.";
+                    document.getElementById(
+                        "route-info"
+                    ).innerHTML =
+                        "Routing service unavailable.";
 
-                console.log("Routing error:", error);
 
-            });
+                    console.log(
+                        "Routing error:",
+                        error
+                    );
+
+                }
+            );
+
 
     </script>
 
+
 </body>
+
 </html>
