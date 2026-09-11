@@ -27,12 +27,13 @@ def home():
     return send_from_directory(FRONTEND_FOLDER, "index.html")
 
 
-# ----------------------------------------------------
+# --------------------------------------------
 # GET EMERGENCIES
-# ----------------------------------------------------
+# --------------------------------------------
 
 @app.route("/api/emergencies", methods=["GET"])
 def get_emergencies():
+
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
 
@@ -49,7 +50,8 @@ def get_emergencies():
         FROM Emergency
         JOIN Patient
             ON Emergency.patient_id = Patient.patient_id
-        ORDER BY Emergency.priority ASC, Emergency.request_time ASC
+        ORDER BY Emergency.priority ASC,
+                 Emergency.request_time ASC
     """)
 
     emergencies = cursor.fetchall()
@@ -60,12 +62,13 @@ def get_emergencies():
     return jsonify(emergencies)
 
 
-# ----------------------------------------------------
+# --------------------------------------------
 # CREATE EMERGENCY
-# ----------------------------------------------------
+# --------------------------------------------
 
 @app.route("/api/emergencies", methods=["POST"])
 def create_emergency():
+
     data = request.get_json()
 
     patient_id = data.get("patient_id")
@@ -73,8 +76,10 @@ def create_emergency():
     emergency_type = data.get("emergency_type")
 
     if not patient_id or not priority or not emergency_type:
+
         return jsonify({
-            "error": "patient_id, priority and emergency_type are required"
+            "error":
+                "patient_id, priority and emergency_type are required"
         }), 400
 
     conn = get_db_connection()
@@ -99,17 +104,24 @@ def create_emergency():
     conn.close()
 
     return jsonify({
-        "message": "Emergency created successfully",
-        "emergency_id": emergency_id
+        "message":
+            "Emergency created successfully",
+
+        "emergency_id":
+            emergency_id
     }), 201
 
 
-# ----------------------------------------------------
+# --------------------------------------------
 # CLOSE EMERGENCY
-# ----------------------------------------------------
+# --------------------------------------------
 
-@app.route("/api/emergencies/<int:emergency_id>/close", methods=["PUT"])
+@app.route(
+    "/api/emergencies/<int:emergency_id>/close",
+    methods=["PUT"]
+)
 def close_emergency(emergency_id):
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
@@ -122,27 +134,91 @@ def close_emergency(emergency_id):
     conn.commit()
 
     if cursor.rowcount == 0:
+
         cursor.close()
         conn.close()
 
         return jsonify({
-            "error": "Emergency not found"
+            "error":
+                "Emergency not found"
         }), 404
 
     cursor.close()
     conn.close()
 
     return jsonify({
-        "message": "Emergency closed successfully"
+        "message":
+            "Emergency closed successfully"
     })
 
 
-# ----------------------------------------------------
+# --------------------------------------------
+# DELETE INDIVIDUAL EMERGENCY
+# --------------------------------------------
+
+@app.route(
+    "/api/emergencies/<int:emergency_id>",
+    methods=["DELETE"]
+)
+def delete_emergency(emergency_id):
+
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+
+        conn.start_transaction()
+
+        # Delete related emergency logs first
+        cursor.execute("""
+            DELETE FROM Emergency_Log
+            WHERE emergency_id = %s
+        """, (emergency_id,))
+
+        # Delete the emergency itself
+        cursor.execute("""
+            DELETE FROM Emergency
+            WHERE emergency_id = %s
+        """, (emergency_id,))
+
+        if cursor.rowcount == 0:
+
+            conn.rollback()
+
+            return jsonify({
+                "error":
+                    "Emergency not found"
+            }), 404
+
+        conn.commit()
+
+        return jsonify({
+            "message":
+                "Emergency deleted successfully"
+        })
+
+    except Exception as e:
+
+        conn.rollback()
+
+        return jsonify({
+            "error":
+                str(e)
+        }), 500
+
+    finally:
+
+        cursor.close()
+        conn.close()
+
+
+# --------------------------------------------
 # PATIENT API
-# ----------------------------------------------------
+# --------------------------------------------
 
 @app.route("/api/patients", methods=["POST"])
 def create_patient():
+
     data = request.get_json()
 
     name = data.get("name")
@@ -152,8 +228,10 @@ def create_patient():
     village = data.get("village")
 
     if not name or not age or not gender or not phone or not village:
+
         return jsonify({
-            "error": "name, age, gender, phone and village are required"
+            "error":
+                "name, age, gender, phone and village are required"
         }), 400
 
     conn = get_db_connection()
@@ -179,24 +257,31 @@ def create_patient():
     conn.close()
 
     return jsonify({
-        "message": "Patient created successfully",
-        "patient_id": patient_id
+        "message":
+            "Patient created successfully",
+
+        "patient_id":
+            patient_id
     }), 201
 
 
-# ----------------------------------------------------
+# --------------------------------------------
 # DELETE PATIENT
-# ----------------------------------------------------
+# --------------------------------------------
 
-@app.route("/api/patients/<int:patient_id>", methods=["DELETE"])
+@app.route(
+    "/api/patients/<int:patient_id>",
+    methods=["DELETE"]
+)
 def delete_patient(patient_id):
+
     conn = get_db_connection()
     cursor = conn.cursor()
 
     try:
+
         conn.start_transaction()
 
-        # Delete logs belonging to this patient's emergencies
         cursor.execute("""
             DELETE FROM Emergency_Log
             WHERE emergency_id IN (
@@ -206,42 +291,51 @@ def delete_patient(patient_id):
             )
         """, (patient_id,))
 
-        # Delete emergencies belonging to the patient
         cursor.execute("""
             DELETE FROM Emergency
             WHERE patient_id = %s
         """, (patient_id,))
 
-        # Delete the patient
         cursor.execute("""
             DELETE FROM Patient
             WHERE patient_id = %s
         """, (patient_id,))
 
         if cursor.rowcount == 0:
+
             conn.rollback()
 
             return jsonify({
-                "error": "Patient not found"
+                "error":
+                    "Patient not found"
             }), 404
 
         conn.commit()
 
         return jsonify({
-            "message": "Patient and related emergency records deleted successfully"
+            "message":
+                "Patient and related emergency records deleted successfully"
         })
 
     except Exception as e:
+
         conn.rollback()
 
         return jsonify({
-            "error": str(e)
+            "error":
+                str(e)
         }), 500
 
     finally:
+
         cursor.close()
         conn.close()
 
 
+# --------------------------------------------
+# RUN APPLICATION
+# --------------------------------------------
+
 if __name__ == "__main__":
+
     app.run(debug=True)

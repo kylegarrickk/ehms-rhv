@@ -4,11 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>EHMS-RHV | Emergency Healthcare</title>
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet"
+        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -65,7 +69,7 @@
             background: white;
             padding: 22px;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         .card h3 {
@@ -79,11 +83,13 @@
             font-weight: bold;
         }
 
+        /* Map */
+
         .map-panel {
             background: white;
             padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             margin-bottom: 30px;
         }
 
@@ -114,6 +120,8 @@
             line-height: 1.7;
         }
 
+        /* Main section */
+
         .main-section {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -124,13 +132,15 @@
             background: white;
             padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
         }
 
         .panel h2 {
             margin-bottom: 20px;
             font-size: 20px;
         }
+
+        /* Emergency */
 
         .emergency {
             border-left: 5px solid #dc2626;
@@ -144,6 +154,8 @@
             display: block;
             margin-bottom: 5px;
         }
+
+        /* Status */
 
         .status {
             display: flex;
@@ -162,11 +174,13 @@
             font-weight: bold;
         }
 
+        /* Forms */
+
         .form-section {
             background: white;
             padding: 25px;
             border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             margin-bottom: 30px;
         }
 
@@ -260,7 +274,41 @@
             color: #dc2626;
         }
 
+        /* Emergency action buttons */
+
+        .close-emergency-button {
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #198754;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .close-emergency-button:hover {
+            background: #146c43;
+        }
+
+        .delete-emergency-button {
+            margin-top: 10px;
+            margin-left: 8px;
+            padding: 8px 16px;
+            background: #dc2626;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .delete-emergency-button:hover {
+            background: #b91c1c;
+        }
+
         @media (max-width: 900px) {
+
             .cards {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -272,23 +320,32 @@
             .form-grid {
                 grid-template-columns: 1fr;
             }
+
         }
+
     </style>
+
 </head>
 
 <body>
 
     <header>
-        <h1>Emergency Healthcare Management System</h1>
+
+        <h1>
+            Emergency Healthcare Management System
+        </h1>
 
         <p>
             EHMS-RHV • Remote Hilly Villages • LifeLink
         </p>
+
     </header>
+
 
     <div class="container">
 
         <div class="title">
+
             <h2>
                 Emergency Coordination Dashboard
             </h2>
@@ -296,25 +353,33 @@
             <p>
                 Monitor emergencies, healthcare resources and network status.
             </p>
+
         </div>
+
 
         <!-- Dashboard Cards -->
 
         <div class="cards">
 
             <div class="card">
+
                 <h3>
                     Active Emergencies
                 </h3>
 
                 <div class="number">
+
                     <span id="active-emergencies">
                         0
                     </span>
+
                 </div>
+
             </div>
 
+
             <div class="card">
+
                 <h3>
                     Available Ambulances
                 </h3>
@@ -322,9 +387,12 @@
                 <div class="number">
                     02
                 </div>
+
             </div>
 
+
             <div class="card">
+
                 <h3>
                     Available Beds
                 </h3>
@@ -332,9 +400,12 @@
                 <div class="number">
                     08
                 </div>
+
             </div>
 
+
             <div class="card">
+
                 <h3>
                     Available Doctors
                 </h3>
@@ -342,9 +413,11 @@
                 <div class="number">
                     04
                 </div>
+
             </div>
 
         </div>
+
 
         <!-- Patient Registration -->
 
@@ -358,9 +431,11 @@
                 Register a patient before reporting an emergency.
             </p>
 
+
             <form id="patient-form">
 
                 <div class="form-grid">
+
 
                     <div class="form-group">
 
@@ -376,6 +451,7 @@
                         >
 
                     </div>
+
 
                     <div class="form-group">
 
@@ -393,6 +469,7 @@
                         >
 
                     </div>
+
 
                     <div class="form-group">
 
@@ -422,6 +499,7 @@
 
                     </div>
 
+
                     <div class="form-group">
 
                         <label for="patient-phone">
@@ -436,6 +514,7 @@
                         >
 
                     </div>
+
 
                     <div class="form-group">
 
@@ -452,7 +531,9 @@
 
                     </div>
 
+
                 </div>
+
 
                 <button
                     type="submit"
@@ -461,11 +542,13 @@
                     Register Patient
                 </button>
 
+
                 <div id="patient-message"></div>
 
             </form>
 
         </div>
+
 
         <!-- Village & Healthcare Centre Map -->
 
@@ -481,15 +564,18 @@
 
             <div id="map"></div>
 
+
             <div id="route-info">
                 Calculating emergency route...
             </div>
 
         </div>
 
+
         <!-- Main Section -->
 
         <div class="main-section">
+
 
             <!-- Emergency Queue -->
 
@@ -499,9 +585,11 @@
                     Emergency Queue
                 </h2>
 
+
                 <div id="emergency-list">
                     Loading emergencies...
                 </div>
+
 
                 <!-- Emergency Reporting Form -->
 
@@ -511,7 +599,9 @@
                         Report New Emergency
                     </h3>
 
+
                     <form id="emergency-form">
+
 
                         <div class="form-group">
 
@@ -528,6 +618,7 @@
                             >
 
                         </div>
+
 
                         <div class="form-group">
 
@@ -565,6 +656,7 @@
 
                         </div>
 
+
                         <div class="form-group">
 
                             <label for="priority">
@@ -597,12 +689,14 @@
 
                         </div>
 
+
                         <button
                             type="submit"
                             class="button"
                         >
                             Report Emergency
                         </button>
+
 
                         <div id="form-message"></div>
 
@@ -612,6 +706,7 @@
 
             </div>
 
+
             <!-- System Status -->
 
             <div class="panel">
@@ -619,6 +714,7 @@
                 <h2>
                     System Status
                 </h2>
+
 
                 <div class="status">
 
@@ -632,6 +728,7 @@
 
                 </div>
 
+
                 <div class="status">
 
                     <span>
@@ -644,6 +741,7 @@
 
                 </div>
 
+
                 <div class="status">
 
                     <span>
@@ -655,6 +753,7 @@
                     </span>
 
                 </div>
+
 
                 <div class="status">
 
@@ -674,13 +773,16 @@
 
     </div>
 
+
     <!-- Leaflet JavaScript -->
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
+
     <!-- Patient + Emergency API -->
 
     <script>
+
 
         // --------------------------------------------
         // PATIENT REGISTRATION
@@ -694,40 +796,48 @@
 
                 event.preventDefault();
 
+
                 const name =
                     document.getElementById(
                         "patient-name"
                     ).value;
+
 
                 const age =
                     document.getElementById(
                         "patient-age"
                     ).value;
 
+
                 const gender =
                     document.getElementById(
                         "patient-gender"
                     ).value;
+
 
                 const phone =
                     document.getElementById(
                         "patient-phone"
                     ).value;
 
+
                 const village =
                     document.getElementById(
                         "patient-village"
                     ).value;
+
 
                 const message =
                     document.getElementById(
                         "patient-message"
                     );
 
+
                 message.textContent =
                     "Registering patient...";
 
                 message.className = "";
+
 
                 try {
 
@@ -735,6 +845,7 @@
                         await fetch(
                             "/api/patients",
                             {
+
                                 method: "POST",
 
                                 headers: {
@@ -755,11 +866,14 @@
                                     village: village
 
                                 })
+
                             }
                         );
 
+
                     const result =
                         await response.json();
+
 
                     if (!response.ok) {
 
@@ -770,20 +884,25 @@
 
                     }
 
+
                     message.textContent =
                         `Patient registered successfully. Patient ID: ${result.patient_id}`;
 
+
                     message.className =
                         "success-message";
+
 
                     document.getElementById(
                         "patient-form"
                     ).reset();
 
+
                     document.getElementById(
                         "patient-id"
                     ).value =
                         result.patient_id;
+
 
                 } catch (error) {
 
@@ -792,8 +911,10 @@
                         error
                     );
 
+
                     message.textContent =
                         error.message;
+
 
                     message.className =
                         "error-message";
@@ -817,6 +938,7 @@
                         "/api/emergencies"
                     );
 
+
                 if (!response.ok) {
 
                     throw new Error(
@@ -825,12 +947,13 @@
 
                 }
 
+
                 const emergencies =
                     await response.json();
 
 
-                // Update active emergency count
-                // Closed emergencies are no longer active
+                // Closed and Completed emergencies
+                // are not counted as active.
 
                 const activeEmergencies =
                     emergencies.filter(
@@ -839,23 +962,21 @@
                             emergency.status !== "Closed"
                     );
 
+
                 document.getElementById(
                     "active-emergencies"
                 ).textContent =
                     activeEmergencies.length;
 
 
-                // Emergency queue container
-
                 const emergencyList =
                     document.getElementById(
                         "emergency-list"
                     );
 
+
                 emergencyList.innerHTML = "";
 
-
-                // If there are no emergencies
 
                 if (emergencies.length === 0) {
 
@@ -866,8 +987,6 @@
 
                 }
 
-
-                // Priority labels
 
                 const priorityLabels = {
 
@@ -882,24 +1001,55 @@
                 };
 
 
-                // Create emergency cards
-
                 emergencies.forEach(
                     emergency => {
+
 
                         const emergencyCard =
                             document.createElement(
                                 "div"
                             );
 
+
                         emergencyCard.className =
                             "emergency";
+
 
                         const priority =
                             priorityLabels[
                                 emergency.priority
                             ] ||
                             emergency.priority;
+
+
+                        // Pending emergency:
+                        // Show Close button.
+
+                        const closeButton =
+                            emergency.status === "Pending"
+
+                                ? `<button
+                                      class="close-emergency-button"
+                                      onclick="closeEmergency(${emergency.emergency_id})">
+                                      Close Emergency
+                                   </button>`
+
+                                : "";
+
+
+                        // Closed emergency:
+                        // Show Delete button.
+
+                        const deleteButton =
+                            emergency.status === "Closed"
+
+                                ? `<button
+                                      class="delete-emergency-button"
+                                      onclick="deleteEmergency(${emergency.emergency_id})">
+                                      Delete Emergency
+                                   </button>`
+
+                                : "";
 
 
                         emergencyCard.innerHTML =
@@ -917,25 +1067,9 @@
 
                             `Status: ${emergency.status}<br>` +
 
-                            (
-                                emergency.status === "Pending"
+                            closeButton +
 
-                                    ? `<button
-                                          onclick="closeEmergency(${emergency.emergency_id})"
-                                          style="
-                                              margin-top: 10px;
-                                              padding: 8px 16px;
-                                              background: #198754;
-                                              color: white;
-                                              border: none;
-                                              border-radius: 5px;
-                                              cursor: pointer;
-                                          ">
-                                          Close Emergency
-                                       </button>`
-
-                                    : ""
-                            );
+                            deleteButton;
 
 
                         emergencyList.appendChild(
@@ -953,6 +1087,7 @@
                     error
                 );
 
+
                 document.getElementById(
                     "emergency-list"
                 ).innerHTML =
@@ -969,14 +1104,17 @@
 
         async function closeEmergency(emergencyId) {
 
+
             const confirmed =
                 confirm(
                     `Are you sure you want to close Emergency #${emergencyId}?`
                 );
 
+
             if (!confirmed) {
                 return;
             }
+
 
             try {
 
@@ -988,8 +1126,10 @@
                         }
                     );
 
+
                 const result =
                     await response.json();
+
 
                 if (!response.ok) {
 
@@ -1000,7 +1140,9 @@
 
                 }
 
+
                 await loadEmergencies();
+
 
             } catch (error) {
 
@@ -1008,6 +1150,70 @@
                     "Failed to close emergency:",
                     error
                 );
+
+
+                alert(
+                    error.message
+                );
+
+            }
+
+        }
+
+
+        // --------------------------------------------
+        // DELETE INDIVIDUAL EMERGENCY
+        // --------------------------------------------
+
+        async function deleteEmergency(emergencyId) {
+
+
+            const confirmed =
+                confirm(
+                    `Are you sure you want to permanently delete Emergency #${emergencyId}?`
+                );
+
+
+            if (!confirmed) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        `/api/emergencies/${emergencyId}`,
+                        {
+                            method: "DELETE"
+                        }
+                    );
+
+
+                const result =
+                    await response.json();
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        result.error ||
+                        "Failed to delete emergency"
+                    );
+
+                }
+
+
+                await loadEmergencies();
+
+
+            } catch (error) {
+
+                console.error(
+                    "Failed to delete emergency:",
+                    error
+                );
+
 
                 alert(
                     error.message
@@ -1030,30 +1236,36 @@
 
                 event.preventDefault();
 
+
                 const patientId =
                     document.getElementById(
                         "patient-id"
                     ).value;
+
 
                 const emergencyType =
                     document.getElementById(
                         "emergency-type"
                     ).value;
 
+
                 const priority =
                     document.getElementById(
                         "priority"
                     ).value;
+
 
                 const message =
                     document.getElementById(
                         "form-message"
                     );
 
+
                 message.textContent =
                     "Submitting emergency...";
 
                 message.className = "";
+
 
                 try {
 
@@ -1085,8 +1297,10 @@
                             }
                         );
 
+
                     const result =
                         await response.json();
+
 
                     if (!response.ok) {
 
@@ -1097,17 +1311,22 @@
 
                     }
 
+
                     message.textContent =
                         `Emergency #${result.emergency_id} created successfully.`;
 
+
                     message.className =
                         "success-message";
+
 
                     document.getElementById(
                         "emergency-form"
                     ).reset();
 
+
                     await loadEmergencies();
+
 
                 } catch (error) {
 
@@ -1116,8 +1335,10 @@
                         error
                     );
 
+
                     message.textContent =
                         error.message;
+
 
                     message.className =
                         "error-message";
@@ -1132,12 +1353,14 @@
 
         loadEmergencies();
 
+
     </script>
 
 
     <!-- Map Initialization -->
 
     <script>
+
 
         // Create map centered around Dehradun
 
@@ -1170,6 +1393,7 @@
                 [30.3165, 78.0322]
             ).addTo(map);
 
+
         healthcareCentre.bindPopup(
             "<b>Healthcare Centre</b><br>Dehradun"
         );
@@ -1181,6 +1405,7 @@
             L.marker(
                 [30.3800, 78.1000]
             ).addTo(map);
+
 
         village.bindPopup(
             "<b>Village: Bhairavgaon</b><br>Emergency Location"
@@ -1194,11 +1419,14 @@
         const villageLat =
             30.3800;
 
+
         const villageLng =
             78.1000;
 
+
         const centreLat =
             30.3165;
+
 
         const centreLng =
             78.0322;
@@ -1222,17 +1450,23 @@
             .then(
                 data => {
 
+
                     if (data.code === "Ok") {
+
 
                         const route =
                             data.routes[0];
 
+
+                        // Route distance
 
                         const distanceKm =
                             (
                                 route.distance / 1000
                             ).toFixed(2);
 
+
+                        // Route duration
 
                         const durationMinutes =
                             (
@@ -1248,8 +1482,11 @@
                         .bindPopup(
 
                             `<b>Emergency Route</b><br>` +
+
                             `Village → Healthcare Centre<br>` +
+
                             `Distance: ${distanceKm} km<br>` +
+
                             `Estimated Time: ${durationMinutes} minutes`
 
                         )
@@ -1263,11 +1500,13 @@
                         ).innerHTML =
 
                             `<b>Emergency Route:</b> ` +
+
                             `Bhairavgaon → Dehradun Healthcare Centre<br>` +
 
-                            `<b>Distance:</b> ${distanceKm} km &nbsp; | &nbsp; ` +
+                            `<b>Distance:</b> ${distanceKm} km &nbsp; | &nbsp;` +
 
                             `<b>Estimated Travel Time:</b> ` +
+
                             `${durationMinutes} minutes`;
 
 
@@ -1275,11 +1514,13 @@
                             "Route calculated successfully."
                         );
 
+
                         console.log(
                             "Distance:",
                             distanceKm,
                             "km"
                         );
+
 
                         console.log(
                             "Duration:",
@@ -1290,10 +1531,12 @@
 
                     } else {
 
+
                         document.getElementById(
                             "route-info"
                         ).innerHTML =
                             "Unable to calculate emergency route.";
+
 
                         console.log(
                             "No route found."
@@ -1307,10 +1550,12 @@
             .catch(
                 error => {
 
+
                     document.getElementById(
                         "route-info"
                     ).innerHTML =
                         "Routing service unavailable.";
+
 
                     console.log(
                         "Routing error:",
@@ -1319,6 +1564,7 @@
 
                 }
             );
+
 
     </script>
 
